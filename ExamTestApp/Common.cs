@@ -1,9 +1,9 @@
-﻿using ExamTestApp.Lessons;
+﻿using ExamTestApp.Lessons.Asynchronous;
 
 namespace ExamTestApp
 {
     public class Common
     {
-        public ExamTestApp.Lessons.Parallel Parallel = new Parallel();
+        public ExamTestApp.Lessons.Asynchronous.Asynchronous Asynchronous = new Asynchronous();
     }
 }

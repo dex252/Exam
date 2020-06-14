@@ -13,7 +13,7 @@ namespace ExamTestApp
             #endregion
 
             var Common = new Common();
-            Common.Parallel.Linq.LINQ_Query_For_All_With_Exception();
+            Common.Asynchronous.Task.TaskWaitAny();
           
             #region end
             stopWatch.Stop();
