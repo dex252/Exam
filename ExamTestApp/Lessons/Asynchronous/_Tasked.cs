@@ -72,7 +72,15 @@ namespace ExamTestApp.Lessons.Asynchronous
             }
             System.Threading.Tasks.Task.WaitAny(tasks);
         }
+        /// <summary>
+        /// Начало следующей задачи по завершению предыдущей.
+        /// </summary>
+        public void ContinuationTasks()
+        {
 
+            Task task = Task.Run(HelloTask);
+            task.ContinueWith(prev => WorldTask()).Wait();
+        }
         #region PrivateGroup
         private void DoWork(int i)
         {
@@ -92,6 +100,24 @@ namespace ExamTestApp.Lessons.Asynchronous
             Thread.Sleep(2000);
             Console.WriteLine("Work finished"); ;
             return new Random().Next(0, 100);
+        }
+
+        private void PrintResult(int result)
+        {
+            Thread.Sleep(new Random().Next(1000, 2000));
+            Console.WriteLine("This is result: " + result);
+        }
+
+        private void HelloTask()
+        {
+            Thread.Sleep(1000);
+            Console.WriteLine("Привет");
+        }
+
+        private void WorldTask()
+        {
+            Thread.Sleep(1000);
+            Console.WriteLine(" Мир");
         }
         #endregion
     }

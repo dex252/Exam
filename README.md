@@ -7,6 +7,7 @@
 			-	ForEach
 			-	For
 			-	For (ParallelLoopState Stop)
+			-	For (ParallelLoopState Break)
 		-	LINQ
 			-	AsParallel
 			-	AsParallel.WithDegreeOfParallelism.WithExecutionMode
@@ -20,3 +21,4 @@
 			-	Run & Result
 			-	WaitAll
 			-	WaitAny
+			-	ContinuationTasks
