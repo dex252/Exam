@@ -22,3 +22,17 @@
 			-	WaitAll
 			-	WaitAny
 			-	ContinuationTasks
+			-	ContinuationTasks (TaskContinuationOptions.OnlyOnRanToCompletion & TaskContinuationOptions.OnlyOnFaulted)
+			-	ContinuationTasks (TaskCreationOptions.AttachedToParent)
+		-	Thread
+			-	Thread.Start
+			-	ThreadStart delegate (old NET version)
+			-	Thread.Start (Analog)
+			-	ThreadParameterized
+			-	ThreadParameterized (Analog)
+			-	Thread.Abort Thread.Interrupt
+			-	Thread.Abort Safe Variation
+			-	Thread.Join
+			-	ThreadLocal
+			-	ThreadExecutionContext
+			-	ThreadPools

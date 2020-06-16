@@ -9,6 +9,7 @@
     {
         public _Parallels Parallel => new _Parallels();
         public _LINQ Linq => new _LINQ();
-        public _Tasked Task => new _Tasked();
+        public _Task Task => new _Task();
+        public _Threads Thread => new _Threads();
     }
 }

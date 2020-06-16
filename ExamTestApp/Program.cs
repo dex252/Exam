@@ -13,7 +13,7 @@ namespace ExamTestApp
             #endregion
 
             var Common = new Common();
-            Common.Asynchronous.Task.ContinuationTasks();
+            Common.Asynchronous.Thread.ThreadPools();
           
             #region end
             stopWatch.Stop();

@@ -4,11 +4,11 @@ using System.Threading.Tasks;
 
 namespace ExamTestApp.Lessons.Asynchronous
 {
-    public class _Tasked
+    public class _Task
     {
         /// <summary>
         /// Запускает задачу Task методом Start. Wait ожидает завершения задачи.
-        /// При отсутствии Wait основной поток продолжит выполнение, не дожидаясь завершения асинхронного вызова.
+        /// При отсутствии Wait основная задача продолжит выполнение, не дожидаясь завершения асинхронного вызова.
         /// </summary>
         public void TaskStart()
         {
@@ -17,7 +17,7 @@ namespace ExamTestApp.Lessons.Asynchronous
             task.Wait();
         }
         /// <summary>
-        /// Объявить поток и запустить его сразу после объявления.
+        /// Объявить задачу и запустить его сразу после объявления.
         /// </summary>
         public void TaskRun()
         {
@@ -28,7 +28,7 @@ namespace ExamTestApp.Lessons.Asynchronous
             task.Wait();
         }
         /// <summary>
-        /// Запуск потока и возврат результата его выполнения. Программма продолжит выполнение только после завершения потока.
+        /// Запуск задачи и возврат результата его выполнения. Программма продолжит выполнение только после завершения задачи.
         /// </summary>
         public void TaskResult()
         {
@@ -81,7 +81,49 @@ namespace ExamTestApp.Lessons.Asynchronous
             Task task = Task.Run(HelloTask);
             task.ContinueWith(prev => WorldTask()).Wait();
         }
+        /// <summary>
+        /// Параметр TaskContinuationOptions определяет поведение задачи при выполнении.
+        /// В данном случае: OnlyOnRanToCompletion - выполнение будет продолжено, если задача завершилась успешно.
+        /// OnlyOnFaulted - задача будет выполнена только при возникновении исключений соответственно.
+        /// Подробности: https://docs.microsoft.com/en-us/dotnet/api/system.threading.tasks.taskcontinuationoptions?view=netcore-3.1
+        /// </summary>
+        public void ContinuationTasksWithException()
+        {
+
+            Task task = Task.Run(HelloTask);
+            task.ContinueWith(prev => WorldTask(),
+                TaskContinuationOptions.OnlyOnRanToCompletion);
+            task.ContinueWith(prev => ExceptionTask(),
+                TaskContinuationOptions.OnlyOnFaulted);
+        }
+        /// <summary>
+        /// Создание задачи, порождающего 10 дочерних, каждый из которых с помощью TaskCreationOptions.AttachedToParent
+        /// присоединяется к родителю. После основная задача ждет завершения всех дочерних.
+        /// При отсутствии AttachedToParent все задачи будут независимы относительно друг друга.
+        /// </summary>
+        public void ContinuationChildTasks()
+        {
+            var parent = Task.Factory.StartNew(() => {
+                Console.WriteLine("Parent starts");
+                for (int i = 0; i < 10; i++)
+                {
+                    int taskNo = i;
+                    Task.Factory.StartNew(
+                        (x) => DoChild(x), // lambda expression
+                        taskNo, // state object
+                        TaskCreationOptions.AttachedToParent);
+                }
+            });
+
+            parent.Wait(); // will wait for all the attached children to complete
+        }
         #region PrivateGroup
+        private void DoChild(object state)
+        {
+            Console.WriteLine("Child {0} starting", state);
+            Thread.Sleep(new Random().Next(1000));
+            Console.WriteLine("Child {0} finished", state);
+        }
         private void DoWork(int i)
         {
             Console.WriteLine($"Task {i} starting");
@@ -102,12 +144,6 @@ namespace ExamTestApp.Lessons.Asynchronous
             return new Random().Next(0, 100);
         }
 
-        private void PrintResult(int result)
-        {
-            Thread.Sleep(new Random().Next(1000, 2000));
-            Console.WriteLine("This is result: " + result);
-        }
-
         private void HelloTask()
         {
             Thread.Sleep(1000);
@@ -118,6 +154,12 @@ namespace ExamTestApp.Lessons.Asynchronous
         {
             Thread.Sleep(1000);
             Console.WriteLine(" Мир");
+        }
+
+        private void ExceptionTask()
+        {
+            Thread.Sleep(1000);
+            Console.WriteLine(" Exception");
         }
         #endregion
     }
